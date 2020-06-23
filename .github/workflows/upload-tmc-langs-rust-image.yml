@@ -1,3 +1,5 @@
+name: Deploy tmc-langs-rust
+
 on:
   create:
     tags:
