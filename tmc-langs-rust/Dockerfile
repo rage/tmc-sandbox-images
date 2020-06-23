@@ -9,11 +9,11 @@ RUN apt-get update && \
     useradd --create-home user && \
     rm -rf /var/lib/apt/lists/*
 
- RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz && tar -xzvf Python-3.7.0.tgz && cd Python-3.7.0/ && ./configure && make && make install"
+RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.7.0/Python-3.7.0.tgz && tar -xzvf Python-3.7.0.tgz && cd Python-3.7.0/ && ./configure && make && make install"
 
-COPY ./Qt5.12 /opt/qt
+# COPY ./Qt5.12 /opt/qt
 
-ENV PATH="/opt/qt/bin:${PATH}"
+# ENV PATH="/opt/qt/bin:${PATH}"
 
 RUN Rscript -e 'install.packages(c("devtools","testthat", "httr", "curl"),repos="https://ftp.eenet.ee/pub/cran/")' && Rscript -e 'devtools::install_github("RTMC/tmc-r-tester/tmcRtestrunner")'
 
@@ -120,6 +120,7 @@ ENV M2_HOME="/usr/share/maven"
 
 COPY Dockerfile /Dockerfile
 
-COPY tmc-langs-cli-0.8.1-SNAPSHOT.jar /tmc-langs.jar
+ARG cli_url
+ADD ${cli_url} /tmc-langs-cli
 
 USER user

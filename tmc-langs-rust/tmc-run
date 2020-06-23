@@ -29,17 +29,13 @@ if [ -f .tmcrc ]; then
   . ./.tmcrc
 fi
 
-if [ -e /tmc-langs.jar ]; then
-  echo "Copying tmc-langs.jar from the image"
-  cp /tmc-langs.jar tmc-langs.jar
+if [ -e /tmc-langs-cli ]; then
+  echo "Copying tmc-langs-cli from the image"
+  cp /tmc-langs-cli tmc-langs-cli
 fi
 
-JAVA_RAM_KB=652700
 echo "Running tests..."
-
-export JVM_OPTIONS="-Xms${JAVA_RAM_KB}K -Xmx${JAVA_RAM_KB}K ${runtime_params[@]}"
-export LC_ALL=C.UTF-8
-java -XX:+TieredCompilation -XX:TieredStopAtLevel=1 -jar tmc-langs.jar run-tests --exercisePath . --outputPath /app/test_output.txt --checkstyleOutputPath /app/validations.json --locale $error_msg_locale > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2) || exit 104
+./tmc-langs-cli run-tests --exercisePath . --outputPath /app/test_output.txt --checkstyleOutputPath /app/validations.json --locale $error_msg_locale > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2) || exit 104
 
 echo "All the files:"
 ls -laR
