@@ -120,7 +120,6 @@ ENV M2_HOME="/usr/share/maven"
 
 COPY Dockerfile /Dockerfile
 
-ARG cli_url
-ADD ${cli_url} /tmc-langs-cli
+ADD ${RUST_CLI_URL} /tmc-langs-cli
 
 USER user

@@ -1,4 +1,5 @@
 RUST_CLI_NAME=tmc-langs-cli
 RUST_CLI_VER=0.1.0-alpha
+
 RUST_CLI_TAG=${RUST_CLI_NAME}:${RUST_CLI_VER}
 RUST_CLI_URL=https://download.mooc.fi/tmc-langs-rust/tmc-langs-cli-linux-${RUST_CLI_VER}

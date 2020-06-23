@@ -1,0 +1,30 @@
+on:
+  create:
+    tags:
+      - "rust-v*"
+
+jobs:
+  build_and_upload:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Enable Docker IPv6
+        run: |
+          echo '{ "ipv6": true }' | sudo tee -a /etc/docker/daemon.json
+          sudo systemctl reload docker
+      - uses: actions/checkout@v1
+      - name: Load env
+        run: |
+          source ./env
+          echo ::set-env name=RUST_CLI_NAME::${RUST_CLI_NAME}
+          echo ::set-env name=RUST_CLI_VER::${RUST_CLI_VER}
+          echo ::set-env name=RUST_CLI_URL::${RUST_CLI_URL}
+      - uses: RafikFarhad/push-to-gcr-github-action@v1
+        with:
+          gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
+          registry: eu.gcr.io
+          project_name: tmc-langs-rust
+          image_name: ${{ env.RUST_CLI_NAME }}
+          image_tag: ${{ env.RUST_CLI_VER }}
+          context: ./tmc-langs-rust
+          dockerfile: ./tmc-langs-rust/Dockerfile
