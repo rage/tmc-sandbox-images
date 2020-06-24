@@ -10,8 +10,10 @@ jobs:
     name: Build and deploy
     runs-on: ubuntu-latest
     steps:
-      - name: pgp-happy-eyeballs
-        run: wget -qO- 'https://github.com/tianon/pgp-happy-eyeballs/raw/master/hack-my-builds.sh' | bash
+      - name: Enable Docker IPv6
+        run: |
+          echo '{ "ipv6": true }' | sudo tee -a /etc/docker/daemon.json
+          sudo systemctl reload docker
       - uses: actions/checkout@v1
       - name: Load env
         run: |
