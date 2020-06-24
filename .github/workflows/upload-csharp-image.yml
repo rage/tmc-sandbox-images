@@ -1,7 +1,7 @@
 name: Deploy csharp image
 
 on:
-  create:
+  push:
     tags:
       - "csharp-v*"
 

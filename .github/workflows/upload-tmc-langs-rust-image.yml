@@ -1,7 +1,7 @@
 name: Deploy tmc-langs-rust
 
 on:
-  create:
+  push:
     tags:
       - "rust-v*"
 
