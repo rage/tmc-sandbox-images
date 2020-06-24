@@ -39,4 +39,4 @@ ENV TMC_CSHARP_BOOTSTRAP_PATH /tmc-csharp-runner/Bootstrap.dll
 COPY --from=package-cache /build/NuGet/packages /NuGet/cache
 COPY nuget.config /nuget.config
 
-ADD https://download.mooc.fi/tmc-langs/tmc-langs-cli-0.8.2-SNAPSHOT.jar /tmc-langs.jar
+ADD --chown=user https://download.mooc.fi/tmc-langs/tmc-langs-cli-0.8.2-SNAPSHOT.jar /tmc-langs.jar
