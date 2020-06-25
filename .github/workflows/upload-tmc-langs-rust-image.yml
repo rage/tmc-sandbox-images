@@ -35,6 +35,6 @@ jobs:
           gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
           registry: eu.gcr.io
           project_name: moocfi-public
-          image_name: ${{ env.RUST_CLI_NAME }}
+          image_name: tmc-sandbox-tmc-langs-rust
           context: ./tmc-langs-rust
           dockerfile: ./tmc-langs-rust/Dockerfile
