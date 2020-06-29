@@ -34,7 +34,7 @@ USER user
 
 COPY --from=package-cache /build/tmc-csharp-runner/Bootstrap/bin/Publish /tmc-csharp-runner
 
-ENV TMC_CSHARP_BOOTSTRAP_PATH /tmc-csharp-runner/Bootstrap.dll
+ENV TMC_CSHARP_BOOTSTRAP_PATH /tmc-csharp-runner/TestMyCode.CSharp.Bootstrap.dll
 
 COPY --from=package-cache /build/NuGet/packages /NuGet/cache
 COPY nuget.config /nuget.config
