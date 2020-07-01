@@ -1,5 +1,7 @@
 FROM debian:stretch
 
+ARG RUST_CLI_URL
+
 RUN apt-get update && \
     apt-get install -y gnupg2 && \
     ( apt-key adv --keyserver keys.gnupg.net --no-tty --recv-keys 'E19F5F87128899B192B1A2C2AD5F960A256A04AF' || \

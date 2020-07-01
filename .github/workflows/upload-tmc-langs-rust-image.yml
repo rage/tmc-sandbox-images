@@ -21,20 +21,21 @@ jobs:
           echo ::set-env name=RUST_CLI_NAME::${RUST_CLI_NAME}
           echo ::set-env name=RUST_CLI_VER::${RUST_CLI_VER}
           echo ::set-env name=RUST_CLI_URL::${RUST_CLI_URL}
-      - uses: RafikFarhad/push-to-gcr-github-action@v1
-        with:
-          gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-          registry: eu.gcr.io
-          project_name: moocfi-public
-          image_name: tmc-sandbox-tmc-langs-rust
-          image_tag: ${{ env.RUST_CLI_VER }}
-          context: ./tmc-langs-rust
-          dockerfile: ./tmc-langs-rust/Dockerfile
-      - uses: RafikFarhad/push-to-gcr-github-action@v1
-        with:
-          gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-          registry: eu.gcr.io
-          project_name: moocfi-public
-          image_name: tmc-sandbox-tmc-langs-rust
-          context: ./tmc-langs-rust
-          dockerfile: ./tmc-langs-rust/Dockerfile
+      - name: Authenticate to Google Cloud
+        run: |
+          echo Authenticating to Google Cloud
+          echo $GCLOUD_SERVICE_KEY | python -m base64 -d > /tmp/key.json
+          if cat /tmp/key.json | docker login -u _json_key --password-stdin https://eu.gcr.io; then
+              echo "Authenticated to Google Cloud..."
+          else
+              echo "Authentication to Google Cloud failed. Exiting..."
+              exit 1
+          fi
+      - name: Building image
+        run: |
+          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:${{ env.RUST_CLI_VER }}" --build-arg "RUST_CLI_VER=${{ env.RUST_CLI_URL }}"
+      - name: Pushing image
+        run: |
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:${{ env.RUST_CLI_VER }}"
+          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:${{ env.RUST_CLI_VER }}" "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:latest"
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:latest"
