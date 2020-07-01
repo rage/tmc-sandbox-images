@@ -8,7 +8,7 @@ on:
 jobs:
   build_and_upload:
     name: Build and deploy
-    runs-on: ubuntu-latest
+    runs-on: google/cloud-sdk
     steps:
       - name: Enable Docker IPv6
         run: |
@@ -25,7 +25,8 @@ jobs:
         run: |
           echo Authenticating to Google Cloud
           echo $GCLOUD_SERVICE_KEY | python -m base64 -d > /tmp/key.json
-          if cat /tmp/key.json | docker login -u _json_key --password-stdin https://eu.gcr.io; then
+          gcloud auth activate-service-account --key-file=/tmp/key.json
+          if gcloud auth configure-docker -q; then
               echo "Authenticated to Google Cloud..."
           else
               echo "Authentication to Google Cloud failed. Exiting..."
