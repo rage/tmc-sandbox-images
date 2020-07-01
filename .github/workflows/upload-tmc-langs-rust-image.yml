@@ -21,13 +21,6 @@ jobs:
           echo ::set-env name=RUST_CLI_NAME::${RUST_CLI_NAME}
           echo ::set-env name=RUST_CLI_VER::${RUST_CLI_VER}
           echo ::set-env name=RUST_CLI_URL::${RUST_CLI_URL}
-      # - name: Install gcloud
-      #   run: |
-      #     curl https://dl.google.com/dl/cloudsdk/release/google-cloud-sdk.tar.gz > /tmp/google-cloud-sdk.tar.gz
-      #     mkdir -p "$HOME/gcloud" \
-      #       && tar -C "$HOME/gcloud" -xvf /tmp/google-cloud-sdk.tar.gz \
-      #       && "$HOME/gcloud/google-cloud-sdk/install.sh"
-      #     export PATH="$PATH":"$HOME/gcloud/google-cloud-sdk/bin"
       - name: Authenticate to Google Cloud
         env:
           GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY }}
@@ -43,9 +36,13 @@ jobs:
           fi
       - name: Building image
         run: |
+          cd tmc-langs-rust
           docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:${{ env.RUST_CLI_VER }}" --build-arg "RUST_CLI_VER=${{ env.RUST_CLI_URL }}"
+          cd ..
       - name: Pushing image
         run: |
+          cd tmc-langs-rust
           docker push "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:${{ env.RUST_CLI_VER }}"
           docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:${{ env.RUST_CLI_VER }}" "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:latest"
           docker push "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:latest"
+          cd ..
