@@ -37,7 +37,7 @@ jobs:
       - name: Building image
         run: |
           cd tmc-langs-rust
-          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:${{ env.RUST_CLI_VER }}" --build-arg "RUST_CLI_VER=${{ env.RUST_CLI_URL }}"
+          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:${{ env.RUST_CLI_VER }}" --build-arg "RUST_CLI_URL=${{ env.RUST_CLI_URL }}"
           cd ..
       - name: Pushing image
         run: |
