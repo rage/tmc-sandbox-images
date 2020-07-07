@@ -16,8 +16,6 @@ if [ -r .tmcparams ]; then
   . ./.tmcparams
 fi
 
-echo "tlr"
-
 echo "User id: $(id)"
 
 if [ -z "$error_msg_locale" ]; then
@@ -37,7 +35,7 @@ if [ -e /tmc-langs-cli ]; then
 fi
 
 echo "Running tests..."
-RUST_LOG=debug
+export RUST_LOG=debug
 ./tmc-langs-cli run-tests --exercisePath . --outputPath /app/test_output.txt --checkstyleOutputPath /app/validations.json --locale $error_msg_locale > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2) || exit 104
 
 echo "All the files:"
