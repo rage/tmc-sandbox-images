@@ -16,6 +16,8 @@ if [ -r .tmcparams ]; then
   . ./.tmcparams
 fi
 
+echo "tlr"
+
 echo "User id: $(id)"
 
 if [ -z "$error_msg_locale" ]; then
