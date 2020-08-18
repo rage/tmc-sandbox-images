@@ -36,7 +36,7 @@ fi
 
 echo "Running tests..."
 export RUST_LOG=debug
-./tmc-langs-cli run-tests --exercisePath . --outputPath /app/test_output.txt --checkstyleOutputPath /app/validations.json --locale $error_msg_locale > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2) || exit 104
+./tmc-langs-cli run-tests --exercisePath . --outputPath /app/test_output.txt --checkstyleOutputPath /app/validations.json --locale $error_msg_locale > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2) || exit 110
 
 echo "All the files:"
 ls -laR
