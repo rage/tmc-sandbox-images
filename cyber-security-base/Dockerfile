@@ -12,7 +12,7 @@ RUN apt-get update && \
     useradd --create-home user && \
     rm -rf /var/lib/apt/lists/*
 
-RUN python3 -m pip install django selenium beautifulsoup4 requests
+RUN pip3 install django selenium beautifulsoup4 requests
 
 # Gets latest chromedriver, the latest chromedriver should match to the latest chrome
 RUN wget http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
