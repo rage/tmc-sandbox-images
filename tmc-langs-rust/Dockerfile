@@ -14,7 +14,7 @@ RUN apt-get update && \
     useradd --create-home user && \
     rm -rf /var/lib/apt/lists/*
 
-RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.9.0/Python-3.9.0.tgz && tar -xzvf Python-3.9.0.tgz && cd Python-3.9.0/ && ./configure && make && make install"
+RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.8.6/Python-3.8.6.tgz && tar -xzvf Python-3.8.6.tgz && cd Python-3.8.6/ && ./configure && make && make install"
 
 # COPY ./Qt5.12 /opt/qt
 
