@@ -5,8 +5,8 @@ using System.CommandLine;
 using System.CommandLine.Invocation;
 using System.IO;
 using System.Linq;
+using System.Text.Json;
 using System.Threading.Tasks;
-using Newtonsoft.Json;
 using NuGet.Configuration;
 using NuGet.Packaging.Core;
 using NuGet.Protocol.Core.Types;
@@ -15,11 +15,11 @@ using NuGetDownloader.Core;
 
 namespace NuGetDownloader
 {
-    internal class Program
+    public static class Program
     {
         public const string DefaultDownloadDir = "packages";
 
-        private static async Task Main(string[] args)
+        public static async Task Main(string[] args)
         {
             RootCommand rootCommand = Program.GenerateCommands();
             rootCommand.Handler = CommandHandler.Create(async (FileInfo? configFile, DirectoryInfo? outputDir) =>
@@ -82,7 +82,7 @@ namespace NuGetDownloader
 
         private static async Task ReadConfig(Downloader downloader, string configLocation)
         {
-            Dictionary<string, HashSet<string>> config = JsonConvert.DeserializeObject<Dictionary<string, HashSet<string>>>(await File.ReadAllTextAsync(configLocation));
+            Dictionary<string, HashSet<string>> config = JsonSerializer.Deserialize<Dictionary<string, HashSet<string>>>(await File.ReadAllTextAsync(configLocation))!;
 
             foreach ((string packageId, HashSet<string> packageVersions) in config)
             {

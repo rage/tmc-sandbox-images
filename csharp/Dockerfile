@@ -6,7 +6,7 @@ RUN useradd --create-home user && \
     wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-3.1 aspnetcore-runtime-3.1 dotnet-runtime-3.1 && \
+    apt-get install -y dotnet-sdk-5.0 aspnetcore-runtime-5.0 dotnet-runtime-5.0 && \
     rm -rf /var/lib/apt/lists/*
 
 COPY NuGetDownloader /build/NuGetDownloader
@@ -25,7 +25,7 @@ RUN useradd --create-home user && \
     wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-3.1 aspnetcore-runtime-3.1 dotnet-runtime-3.1 && \
+    apt-get install -y dotnet-sdk-5.0 aspnetcore-runtime-5.0 dotnet-runtime-5.0 && \
     rm -rf /var/lib/apt/lists/*
 
 WORKDIR /app
@@ -37,6 +37,6 @@ COPY --from=package-cache /build/tmc-csharp-runner/Bootstrap/bin/Publish /tmc-cs
 ENV TMC_CSHARP_BOOTSTRAP_PATH /tmc-csharp-runner/TestMyCode.CSharp.Bootstrap.dll
 
 COPY --from=package-cache /build/NuGet/packages /NuGet/cache
-COPY nuget.config /nuget.config
+COPY _nuget.config /nuget.config
 
 ADD --chown=user https://download.mooc.fi/tmc-langs/tmc-langs-cli-0.8.2-SNAPSHOT.jar /tmc-langs.jar
