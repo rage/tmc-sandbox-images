@@ -17,6 +17,9 @@ RUN git clone --recursive https://github.com/TMC-CSharp/tmc-csharp-runner tmc-cs
     dotnet publish tmc-csharp-runner/Bootstrap/ -c Release -o tmc-csharp-runner/Bootstrap/bin/Publish && \
     dotnet run --project NuGetDownloader/NuGetDownloader.csproj --config-file NuGetDownloader/config.json --output-dir NuGet/packages
 
+ADD --chown=user ${RUST_CLI_URL} /tmc-langs-cli
+RUN chmod +x /tmc-langs-cli
+
 FROM debian:stretch
 
 ARG RUST_CLI_URL
@@ -47,9 +50,8 @@ COPY _nuget.config /nuget.config
 
 COPY Dockerfile /Dockerfile
 
-# ADD --chown=user https://download.mooc.fi/tmc-langs/tmc-langs-cli-0.8.7-SNAPSHOT.jar /tmc-langs.jar
-ADD --chown=user ${RUST_CLI_URL} /tmc-langs-cli
-RUN chmod +x /tmc-langs-cli
+COPY --from=package-cache /tmc-langs-cli /tmc-langs-cli
+RUN /tmc-langs-cli --version
 ADD --chown=user tmc-run /tmc-run
 
 USER user
