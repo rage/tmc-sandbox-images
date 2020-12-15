@@ -1,11 +1,5 @@
 FROM debian:jessie as package-cache
 
-ARG RUST_CLI_URL
-
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
-
 RUN useradd --create-home user && \
     apt-get update && \
     apt-get install -y apt-transport-https wget git libssl-dev libssl1.0.0 && \
@@ -24,6 +18,12 @@ RUN git clone --recursive https://github.com/TMC-CSharp/tmc-csharp-runner tmc-cs
     dotnet run --project NuGetDownloader/NuGetDownloader.csproj --config-file NuGetDownloader/config.json --output-dir NuGet/packages
 
 FROM debian:stretch
+
+ARG RUST_CLI_URL
+
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
 
 RUN useradd --create-home user && \
     apt-get update && \
