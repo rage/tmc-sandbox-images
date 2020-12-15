@@ -45,3 +45,5 @@ COPY _nuget.config /nuget.config
 ADD --chown=user ${RUST_CLI_URL} /tmc-langs-cli
 RUN chmod +x /tmc-langs-cli
 ADD --chown=user tmc-run /tmc-run
+
+USER user
