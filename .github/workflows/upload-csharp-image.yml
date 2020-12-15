@@ -1,4 +1,4 @@
-name: Deploy csharp image
+name: Deploy csharp
 
 on:
   push:
@@ -18,12 +18,31 @@ jobs:
       - name: Load env
         run: |
           source ./env
-      - uses: RafikFarhad/push-to-gcr-github-action@v1
-        with:
-          gcloud_service_key: ${{ secrets.GCLOUD_SERVICE_KEY }}
-          registry: eu.gcr.io
-          project_name: moocfi-public
-          image_name: tmc-sandbox-csharp
-          image_tag: latest
-          context: ./csharp
-          dockerfile: ./csharp/Dockerfile
+          echo ::set-env name=RUST_CLI_NAME::${RUST_CLI_NAME}
+          echo ::set-env name=RUST_CLI_VER::${RUST_CLI_VER}
+          echo ::set-env name=RUST_CLI_URL::${RUST_CLI_URL}
+      - name: Authenticate to Google Cloud
+        env:
+          GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY }}
+        run: |
+          echo Authenticating to Google Cloud
+          echo $GCLOUD_SERVICE_KEY | python -m base64 -d > /tmp/key.json
+          gcloud auth activate-service-account --key-file=/tmp/key.json
+          if gcloud auth configure-docker -q; then
+              echo "Authenticated to Google Cloud..."
+          else
+              echo "Authentication to Google Cloud failed. Exiting..."
+              exit 1
+          fi
+      - name: Building image
+        run: |
+          cd csharp
+          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:${{ env.RUST_CLI_VER }}" --build-arg "RUST_CLI_URL=${{ env.RUST_CLI_URL }}"
+          cd ..
+      - name: Pushing image
+        run: |
+          cd csharp
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:${{ env.RUST_CLI_VER }}"
+          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:${{ env.RUST_CLI_VER }}" "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:latest"
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:latest"
+          cd ..

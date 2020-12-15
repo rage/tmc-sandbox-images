@@ -1,0 +1,48 @@
+#!/bin/bash -e
+# This gets passed with each submission to tmc-sandbox
+
+# This gets run under 'su', so we want to source profile mostly to get any special PATH.
+# Sourcing seems to terminate the script with -e, even when the return status is 0.
+# I have absolutely no idea why. We work around it with the '|| true'.
+#. /etc/profile || true
+
+# Source user params if any.
+# Though the variable names and content format here are limited,
+# the contents should be treated carefully, despite us being in a sandbox.
+#
+# Included variables: error_msg_locale
+#
+if [ -r .tmcparams ]; then
+  . ./.tmcparams
+fi
+
+echo "User id: $(id)"
+
+if [ -z "$error_msg_locale" ]; then
+  echo "Setting error_msg_locale"
+  error_msg_locale=en
+fi
+
+# Source .tmcrc if any
+if [ -f .tmcrc ]; then
+  echo "Including .tmcrc"
+  . ./.tmcrc
+fi
+
+if [ -e /tmc-langs-cli ]; then
+  echo "Copying tmc-langs-cli from the image"
+  cp /tmc-langs-cli tmc-langs-cli
+fi
+
+echo "Running tests..."
+export RUST_LOG=debug
+export TMC_SANDBOX=true
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+./tmc-langs-cli run-tests --exercise-path . --output-path /app/test_output.txt --checkstyle-output-path /app/validations.json --locale $error_msg_locale > >(tee -a stdout.log) 2> >(tee -a stderr.log >&2) || exit 110
+
+echo "All the files:"
+ls -laR
+echo "tmc-run completed successfully"
+
+exit 0
