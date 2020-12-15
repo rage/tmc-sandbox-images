@@ -14,6 +14,7 @@ RUN apt-get update && \
     useradd --create-home user && \
     rm -rf /var/lib/apt/lists/*
 
+# Make sure to install packages locales and locales-all in addition to these
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8

@@ -1,9 +1,17 @@
 FROM debian:jessie as package-cache
 
+ARG RUST_CLI_URL
+
 RUN useradd --create-home user && \
     apt-get update && \
-    apt-get install -y apt-transport-https wget git libssl-dev libssl1.0.0 && \
-    wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+    apt-get install -y apt-transport-https wget git libssl-dev libssl1.0.0 locales locales-all
+
+# Make sure to install packages locales and locales-all in addition to these
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+
+RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
     apt-get install -y dotnet-sdk-5.0 aspnetcore-runtime-5.0 dotnet-runtime-5.0 && \
@@ -22,20 +30,19 @@ RUN chmod +x /tmc-langs-cli
 
 FROM debian:stretch
 
-ARG RUST_CLI_URL
-
-ENV LC_ALL en_US.UTF-8
-ENV LANG en_US.UTF-8
-ENV LANGUAGE en_US.UTF-8
-
 RUN useradd --create-home user && \
     apt-get update && \
-    apt-get install -y apt-transport-https wget openjdk-8-jdk openjfx libcglib3-java && \
+    apt-get install -y apt-transport-https wget openjdk-8-jdk openjfx libcglib3-java locales locales-all && \
     wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
     apt-get install -y dotnet-sdk-5.0 aspnetcore-runtime-5.0 dotnet-runtime-5.0 && \
     rm -rf /var/lib/apt/lists/*
+
+# Make sure to install packages locales and locales-all in addition to these
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
 
 WORKDIR /app
 RUN chown user /app
