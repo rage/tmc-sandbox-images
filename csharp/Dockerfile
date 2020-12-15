@@ -2,6 +2,10 @@ FROM debian:jessie as package-cache
 
 ARG RUST_CLI_URL
 
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+
 RUN useradd --create-home user && \
     apt-get update && \
     apt-get install -y apt-transport-https wget git libssl-dev libssl1.0.0 && \
@@ -40,6 +44,8 @@ ENV TMC_CSHARP_BOOTSTRAP_PATH /tmc-csharp-runner/TestMyCode.CSharp.Bootstrap.dll
 
 COPY --from=package-cache /build/NuGet/packages /NuGet/cache
 COPY _nuget.config /nuget.config
+
+COPY Dockerfile /Dockerfile
 
 # ADD --chown=user https://download.mooc.fi/tmc-langs/tmc-langs-cli-0.8.7-SNAPSHOT.jar /tmc-langs.jar
 ADD --chown=user ${RUST_CLI_URL} /tmc-langs-cli
