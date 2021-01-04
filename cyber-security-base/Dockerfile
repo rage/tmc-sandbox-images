@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 
 ARG RUST_CLI_URL
 
@@ -6,7 +6,7 @@ ARG RUST_CLI_URL
 ENV CHROME_URL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
 
 RUN apt-get update && \
-    apt-get install -y wget build-essential python3 python3-pip unzip curl libsqlite3-dev sqlite3 && \
+    apt-get install -y wget build-essential python3.7 python3-pip unzip curl libsqlite3-dev sqlite3 && \
     wget ${CHROME_URL} && \
     apt install -y ./google-chrome*.deb && \
     useradd --create-home user && \
