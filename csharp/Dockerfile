@@ -1,12 +1,20 @@
 FROM debian:jessie as package-cache
 
+ARG RUST_CLI_URL
+
 RUN useradd --create-home user && \
     apt-get update && \
-    apt-get install -y apt-transport-https wget git libssl-dev libssl1.0.0 && \
-    wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+    apt-get install -y apt-transport-https wget git libssl-dev libssl1.0.0 locales locales-all
+
+# Make sure to install packages locales and locales-all in addition to these
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
+
+RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-3.1 aspnetcore-runtime-3.1 dotnet-runtime-3.1 && \
+    apt-get install -y dotnet-sdk-5.0 aspnetcore-runtime-5.0 dotnet-runtime-5.0 && \
     rm -rf /var/lib/apt/lists/*
 
 COPY NuGetDownloader /build/NuGetDownloader
@@ -17,16 +25,24 @@ RUN git clone --recursive https://github.com/TMC-CSharp/tmc-csharp-runner tmc-cs
     dotnet publish tmc-csharp-runner/Bootstrap/ -c Release -o tmc-csharp-runner/Bootstrap/bin/Publish && \
     dotnet run --project NuGetDownloader/NuGetDownloader.csproj --config-file NuGetDownloader/config.json --output-dir NuGet/packages
 
+ADD --chown=user ${RUST_CLI_URL} /tmc-langs-cli
+RUN chmod +x /tmc-langs-cli
+
 FROM debian:stretch
 
 RUN useradd --create-home user && \
     apt-get update && \
-    apt-get install -y apt-transport-https wget openjdk-8-jdk openjfx libcglib3-java && \
+    apt-get install -y apt-transport-https wget locales locales-all && \
     wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-3.1 aspnetcore-runtime-3.1 dotnet-runtime-3.1 && \
+    apt-get install -y dotnet-sdk-5.0 aspnetcore-runtime-5.0 dotnet-runtime-5.0 && \
     rm -rf /var/lib/apt/lists/*
+
+# Make sure to install packages locales and locales-all in addition to these
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
 
 WORKDIR /app
 RUN chown user /app
@@ -37,6 +53,12 @@ COPY --from=package-cache /build/tmc-csharp-runner/Bootstrap/bin/Publish /tmc-cs
 ENV TMC_CSHARP_BOOTSTRAP_PATH /tmc-csharp-runner/TestMyCode.CSharp.Bootstrap.dll
 
 COPY --from=package-cache /build/NuGet/packages /NuGet/cache
-COPY nuget.config /nuget.config
+COPY _nuget.config /nuget.config
 
-ADD --chown=user https://download.mooc.fi/tmc-langs/tmc-langs-cli-0.8.2-SNAPSHOT.jar /tmc-langs.jar
+COPY Dockerfile /Dockerfile
+
+COPY --from=package-cache /tmc-langs-cli /tmc-langs-cli
+RUN /tmc-langs-cli --version
+ADD --chown=user tmc-run /tmc-run
+
+USER user
