@@ -21,7 +21,7 @@ COPY NuGetDownloader /build/NuGetDownloader
 
 WORKDIR /build
 
-RUN git clone --recursive https://github.com/TMC-CSharp/tmc-csharp-runner tmc-csharp-runner && \
+RUN git clone --recursive https://github.com/testmycode/tmc-csharp-runner tmc-csharp-runner && \
     dotnet publish tmc-csharp-runner/Bootstrap/ -c Release -o tmc-csharp-runner/Bootstrap/bin/Publish && \
     dotnet run --project NuGetDownloader/NuGetDownloader.csproj --config-file NuGetDownloader/config.json --output-dir NuGet/packages
 
