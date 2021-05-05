@@ -3,6 +3,7 @@ name: Deploy Python
 on:
   push:
     tags:
+      - "all-v*"
       - "python-v*"
 
 jobs:

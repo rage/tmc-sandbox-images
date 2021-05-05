@@ -3,6 +3,7 @@ name: Deploy Make
 on:
   push:
     tags:
+      - "all-v*"
       - "make-v*"
 
 jobs:

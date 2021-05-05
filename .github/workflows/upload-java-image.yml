@@ -3,6 +3,7 @@ name: Deploy Java
 on:
   push:
     tags:
+      - "all-v*"
       - "java-v*"
 
 jobs:

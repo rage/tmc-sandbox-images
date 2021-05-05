@@ -3,6 +3,7 @@ name: Deploy csharp
 on:
   push:
     tags:
+      - "all-v*"
       - "csharp-v*"
 
 jobs:

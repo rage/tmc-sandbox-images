@@ -5,9 +5,15 @@ RUN test -n "$RUST_CLI_URL"
 
 RUN \
     apt update && \
+    # common utilities
+    apt install -y unzip curl build-essential libssl wget locale locale-all \
     apt install -y make g++ check pkg-config valgrind && \
     useradd --create-home user && \
     rm -rf /var/lib/apt/lists/*
+
+ENV LC_ALL en_US.UTF-8
+ENV LANG en_US.UTF-8
+ENV LANGUAGE en_US.UTF-8
 
 COPY Dockerfile /Dockerfile
 

@@ -3,6 +3,7 @@ name: Deploy R
 on:
   push:
     tags:
+      - "all-v*"
       - "r-v*"
 
 jobs:

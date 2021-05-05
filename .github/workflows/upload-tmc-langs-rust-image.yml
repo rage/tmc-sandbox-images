@@ -3,6 +3,7 @@ name: Deploy tmc-langs-rust
 on:
   push:
     tags:
+      - "all-v*"
       - "rust-v*"
 
 jobs:
