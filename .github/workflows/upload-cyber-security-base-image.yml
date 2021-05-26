@@ -3,6 +3,7 @@ name: Deploy cyber-security-base
 on:
   push:
     tags:
+      - "all-v*"
       - "cyber-security-base-v*"
 
 jobs:

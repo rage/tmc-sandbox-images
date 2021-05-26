@@ -1,10 +1,10 @@
-name: Deploy csharp
+name: Deploy Make
 
 on:
   push:
     tags:
       - "all-v*"
-      - "csharp-v*"
+      - "make-v*"
 
 jobs:
   build_and_upload:
@@ -32,14 +32,14 @@ jobs:
       - name: Building image
         run: |
           source ./env
-          cd csharp
-          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:$RUST_CLI_VER" --build-arg "RUST_CLI_URL=$RUST_CLI_URL"
+          cd make
+          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-make:$RUST_CLI_VER" --build-arg "RUST_CLI_URL=$RUST_CLI_URL"
           cd ..
       - name: Pushing image
         run: |
           source ./env
-          cd csharp
-          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:$RUST_CLI_VER"
-          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:$RUST_CLI_VER" "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:latest"
-          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:latest"
+          cd make
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-make:$RUST_CLI_VER"
+          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-make:$RUST_CLI_VER" "eu.gcr.io/moocfi-public/tmc-sandbox-make:latest"
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-make:latest"
           cd ..
