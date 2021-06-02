@@ -8,7 +8,7 @@ RUN \
     echo "deb http://cloud.r-project.org/bin/linux/debian buster-cran40/ >> /etc/apt/sources.list" && \
     apt update && \
     # common utilities
-    apt install -y unzip curl build-essential libssl wget locale locale-all \
+    apt install -y unzip curl build-essential libssl1.1 wget locales locales-all && \
     # required by devtools
     apt install -y libssl-dev libcurl4-openssl-dev libxml2-dev && \
     # install R

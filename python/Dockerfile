@@ -6,7 +6,7 @@ RUN test -n "$RUST_CLI_URL"
 RUN \
     apt update && \
     # common utilities
-    apt install -y unzip curl build-essential libssl wget locale locale-all \
+    apt install -y unzip curl build-essential libssl1.1 wget locales locales-all && \
     # required for building Python
     apt install -y wget make g++ zlib1g-dev libffi-dev libssl-dev && \
     # optional build dependencies for Python
