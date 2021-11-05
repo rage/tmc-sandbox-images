@@ -22,7 +22,9 @@ ENV LANGUAGE en_US.UTF-8
 
 RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.8.8/Python-3.8.8.tgz && tar -xzvf Python-3.8.8.tgz && cd Python-3.8.8/ && ./configure && make && make install"
 
-RUN pip3 install spacy numpy scipy matplotlib sklearn scikit-image pandas seaborn lxml matplotlib statsmodels nbformat beautifulsoup4 pillow spacy pygame
+RUN \
+    pip3 install numpy scipy matplotlib sklearn scikit-image pandas seaborn lxml matplotlib statsmodels nbformat beautifulsoup4 pillow spacy pygame jupyter && \
+    python3 -m spacy download en_core_web_sm
 
 COPY Dockerfile /Dockerfile
 
