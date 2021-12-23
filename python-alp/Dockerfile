@@ -24,7 +24,7 @@ RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python
 
 COPY requirements.txt /requirements.txt
 
-RUN pip3 install -r ./requirements.txt
+RUN pip3 install -r ./requirements.txt --no-cache
 
 COPY Dockerfile /Dockerfile
 
