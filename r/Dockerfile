@@ -20,7 +20,7 @@ ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-RUN Rscript -e 'install.packages(c("devtools","testthat", "httr", "curl"),repos="https://ftp.eenet.ee/pub/cran/")' && Rscript -e 'devtools::install_github("testmycode/tmc-r-tester/tmcRtestrunner")'
+RUN Rscript -e 'install.packages(c("devtools","testthat", "httr", "curl"),repos="https://ftp.eenet.ee/pub/cran/"),dependencies=TRUE' && Rscript -e 'devtools::install_github("testmycode/tmc-r-tester/tmcRtestrunner")'
 
 COPY Dockerfile /Dockerfile
 
