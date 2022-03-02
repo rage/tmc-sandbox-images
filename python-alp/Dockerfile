@@ -20,11 +20,13 @@ ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.8.8/Python-3.8.8.tgz && tar -xzvf Python-3.8.8.tgz && cd Python-3.8.8/ && ./configure && make && make install"
+RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.9.10/Python-3.9.10.tgz && tar -xzvf Python-3.9.10.tgz && cd Python-3.9.10/ && ./configure && make && make install"
 
 COPY requirements.txt /requirements.txt
 
-RUN pip3 install -r ./requirements.txt --no-cache
+RUN \
+    pip3 install -r ./requirements.txt --no-cache && \
+    python3 -c "import stanza; stanza.download(lang='fi', package='tdt'); stanza.download(lang='en', package='ewt')"
 
 COPY Dockerfile /Dockerfile
 
