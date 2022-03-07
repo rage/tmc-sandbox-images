@@ -24,9 +24,7 @@ RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python
 
 COPY requirements.txt /requirements.txt
 
-RUN \
-    pip3 install -r ./requirements.txt --no-cache && \
-    python3 -c "import stanza; stanza.download(lang='fi', package='tdt'); stanza.download(lang='en', package='ewt')"
+RUN pip3 install -r ./requirements.txt --no-cache
 
 COPY Dockerfile /Dockerfile
 
@@ -37,3 +35,6 @@ ADD --chown=user tmc-run /tmc-run
 WORKDIR /app
 RUN chown user /app
 USER user
+
+# Download stanza models as user
+RUN python3 -c "import stanza; stanza.download(lang='fi'); stanza.download(lang='en')"
