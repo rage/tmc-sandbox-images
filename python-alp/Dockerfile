@@ -36,4 +36,5 @@ WORKDIR /app
 RUN chown user /app
 USER user
 
-RUN python3 -c "import stanza; stanza.download(lang='fi', package='tdt'); stanza.download(lang='en', package='ewt')"
+# Download stanza models as user
+RUN python3 -c "import stanza; stanza.download(lang='fi'); stanza.download(lang='en')"
