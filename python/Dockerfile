@@ -20,7 +20,7 @@ ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.8.8/Python-3.8.8.tgz && tar -xzvf Python-3.8.8.tgz && cd Python-3.8.8/ && ./configure && make && make install"
+RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.10.4/Python-3.10.4.tgz && tar -xzvf Python-3.10.4.tgz && cd Python-3.10.4/ && ./configure && make && make install"
 
 RUN \
     pip3 install numpy scipy matplotlib sklearn scikit-image pandas seaborn lxml matplotlib statsmodels nbformat beautifulsoup4 pillow spacy pygame jupyter && \
