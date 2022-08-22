@@ -1,6 +1,7 @@
 FROM debian:stretch
 
 ARG RUST_CLI_URL
+RUN test -n "$RUST_CLI_URL"
 
 RUN apt-get update && \
     apt-get install -y gnupg2 && \

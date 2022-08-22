@@ -1,6 +1,7 @@
 FROM debian:jessie as package-cache
 
 ARG RUST_CLI_URL
+RUN test -n "$RUST_CLI_URL"
 
 RUN useradd --create-home user && \
     apt-get update && \

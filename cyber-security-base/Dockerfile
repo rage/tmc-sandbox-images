@@ -1,6 +1,7 @@
 FROM debian:buster
 
 ARG RUST_CLI_URL
+RUN test -n "$RUST_CLI_URL"
 
 # latest chrome download url
 ENV CHROME_URL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
