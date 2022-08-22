@@ -1,22 +1,21 @@
-FROM debian:jessie as package-cache
+FROM debian:bullseye as package-cache
 
 ARG RUST_CLI_URL
 RUN test -n "$RUST_CLI_URL"
 
 RUN useradd --create-home user && \
     apt-get update && \
-    apt-get install -y apt-transport-https wget git libssl-dev libssl1.0.0 locales locales-all
+    apt-get install -y apt-transport-https wget git locales locales-all && \
+    wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+    dpkg -i packages-microsoft-prod.deb && \
+    apt-get update && \
+    apt-get install -y dotnet-sdk-6.0 && \
+    rm -rf /var/lib/apt/lists/*
 
 # Make sure to install packages locales and locales-all in addition to these
 ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
-
-RUN wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
-    dpkg -i packages-microsoft-prod.deb && \
-    apt-get update && \
-    apt-get install -y dotnet-sdk-5.0 aspnetcore-runtime-5.0 dotnet-runtime-5.0 && \
-    rm -rf /var/lib/apt/lists/*
 
 COPY NuGetDownloader /build/NuGetDownloader
 
@@ -29,15 +28,15 @@ RUN git clone --recursive https://github.com/testmycode/tmc-csharp-runner tmc-cs
 ADD --chown=user ${RUST_CLI_URL} /tmc-langs-cli
 RUN chmod +x /tmc-langs-cli
 
-FROM debian:stretch
+FROM debian:bullseye
 
 RUN useradd --create-home user && \
     apt-get update && \
     apt-get install -y apt-transport-https wget locales locales-all && \
-    wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
+    wget https://packages.microsoft.com/config/debian/11/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
-    apt-get install -y dotnet-sdk-5.0 aspnetcore-runtime-5.0 dotnet-runtime-5.0 && \
+    apt-get install -y dotnet-sdk-6.0 && \
     rm -rf /var/lib/apt/lists/*
 
 # Make sure to install packages locales and locales-all in addition to these
