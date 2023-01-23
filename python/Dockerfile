@@ -13,6 +13,8 @@ RUN \
     apt install -y libbz2-dev libncurses-dev libgdbm-dev liblzma-dev libsqlite3-dev tk-dev uuid-dev libreadline-dev && \
     # other Python packages
     apt install -y python3-pip python3-numpy python3-scipy python3-matplotlib python3-sklearn python3-skimage python3-tk python3-pandas && \
+    # zstd for sandbox
+    apt install -y zstd && \
     useradd --create-home user && \
     rm -rf /var/lib/apt/lists/*
 

@@ -20,7 +20,6 @@ echo "--------------------------------------"                               &&
 #    fingerprint E19F 5F87 1288 99B1 92B1  A2C2 AD5F 960A 256A 04AF
 # </quote>
 #
-apt-get update                                                              &&
 apt-get install -y gnupg2 apt-transport-https                               &&
 ( apt-key adv --keyserver keyserver.ubuntu.com --no-tty                     \
               --recv-keys '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'   ||   \

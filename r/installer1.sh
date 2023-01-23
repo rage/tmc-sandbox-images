@@ -2,7 +2,6 @@ echo "--------------------------------------"                               &&
 echo "Installing packages for R 4.2.1       "                               &&
 echo "--------------------------------------"                               &&
 #
-apt-get update                                                              &&
 apt-get install -y gnupg2 apt-transport-https                               &&
 ( apt-key adv --keyserver keyserver.ubuntu.com --no-tty                     \
               --recv-keys '95C0FAF38DB3CCAD0C080A7BDC78B2DDEABC47B7'   ||   \

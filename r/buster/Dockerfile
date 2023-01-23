@@ -3,6 +3,9 @@ FROM debian:buster
 ARG RUST_CLI_URL
 RUN test -n "$RUST_CLI_URL"
 
+RUN apt-get update && \
+    apt-get install zstd
+
 RUN mkdir -p /rbuild
 COPY installer1.sh              /rbuild/
 RUN bash /rbuild/installer1.sh
