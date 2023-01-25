@@ -6,9 +6,7 @@ RUN test -n "$RUST_CLI_URL"
 RUN \
     apt update && \
     # common utilities
-    apt install -y unzip curl build-essential libssl1.1 wget locales locales-all && \
-    # zstd for sandbox
-    apt install -y zstd && \
+    apt install -y unzip curl build-essential libssl1.1 wget locales locales-all zstd && \
     # C packages
     apt install -y make g++ check pkg-config valgrind && \
     useradd --create-home user && \

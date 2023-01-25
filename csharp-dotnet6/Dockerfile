@@ -33,13 +33,11 @@ FROM debian:stretch
 
 RUN useradd --create-home user && \
     apt-get update && \
-    apt-get install -y apt-transport-https wget locales locales-all && \
+    apt-get install -y apt-transport-https wget locales locales-all zstd && \
     wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb -O packages-microsoft-prod.deb && \
     dpkg -i packages-microsoft-prod.deb && \
     apt-get update && \
     apt-get install -y dotnet-sdk-6.0 aspnetcore-runtime-6.0 dotnet-runtime-6.0 && \
-    # zstd for sandbox
-    apt-get install -y zstd && \
     rm -rf /var/lib/apt/lists/*
 
 # Make sure to install packages locales and locales-all in addition to these

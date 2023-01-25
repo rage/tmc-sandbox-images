@@ -6,15 +6,13 @@ RUN test -n "$RUST_CLI_URL"
 RUN \
     apt update && \
     # common utilities
-    apt install -y unzip curl build-essential libssl1.1 wget locales locales-all && \
+    apt install -y unzip curl build-essential libssl1.1 wget locales locales-all zstd && \
     # required for building Python
     apt install -y wget make g++ zlib1g-dev libffi-dev libssl-dev && \
     # optional build dependencies for Python
     apt install -y libbz2-dev libncurses-dev libgdbm-dev liblzma-dev libsqlite3-dev tk-dev uuid-dev libreadline-dev && \
     # other Python packages
     apt install -y python3-pip python3-numpy python3-scipy python3-matplotlib python3-sklearn python3-skimage python3-tk python3-pandas && \
-    # zstd for sandbox
-    apt install -y zstd && \
     useradd --create-home user && \
     rm -rf /var/lib/apt/lists/*
 
