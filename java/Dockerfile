@@ -6,7 +6,8 @@ RUN test -n "$RUST_CLI_URL"
 RUN \
     apt update && \
     # common utilities
-    apt install -y unzip curl build-essential libssl1.1 wget locales locales-all && \
+    apt install -y unzip curl build-essential libssl1.1 wget locales locales-all zstd && \
+    # Java packages
     apt install -y openjdk-11-jdk maven ant && \
     useradd --create-home user && \
     rm -rf /var/lib/apt/lists/*
