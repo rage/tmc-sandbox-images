@@ -23,7 +23,7 @@ ENV LANGUAGE en_US.UTF-8
 RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.10.4/Python-3.10.4.tgz && tar -xzvf Python-3.10.4.tgz && cd Python-3.10.4/ && ./configure && make && make install"
 
 RUN \
-    pip3 install numpy scipy matplotlib sklearn scikit-image pandas seaborn lxml matplotlib statsmodels nbformat beautifulsoup4 pillow spacy pygame jupyter && \
+    pip3 install numpy scipy matplotlib scikit-learn scikit-image pandas seaborn lxml matplotlib statsmodels nbformat beautifulsoup4 pillow spacy pygame jupyter && \
     python3 -m spacy download en_core_web_sm
 
 COPY Dockerfile /Dockerfile
