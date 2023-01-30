@@ -2,7 +2,7 @@
 
 ## Creating a new version for a specific image
 
-Create a new tag `tmc-sandbox-DIR-MAJOR.MINOR` to create a new version for the `tmc-sandbox-DIR` image. For example, to create a new version `1.2` for the image in the `python` directory, create the tag `tmc-sandbox-python-1.2`.
+Create a new tag `DIR-MAJOR.MINOR` to create a new version for the `tmc-sandbox-DIR` image. For example, to create a new version `1.2` for the image in the `python` directory, create the tag `python-1.2`.
 
 The new version should have the `MINOR` version incremented. For example, if the current version of `tmc-sandbox-python` is `1.2`, the new version should be `1.3`.
 
