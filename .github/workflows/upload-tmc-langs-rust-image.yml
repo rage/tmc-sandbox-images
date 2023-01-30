@@ -3,14 +3,21 @@ name: Deploy tmc-langs-rust
 on:
   push:
     tags:
-      - "all-v*"
-      - "rust-v*"
+      - "all-*"
+      - "rust-*"
+
+env:
+  TAG: ${{ github.event.release.tag_name }}
 
 jobs:
   build_and_upload:
     name: Build and deploy
     runs-on: ubuntu-latest
     steps:
+      - name: Extract version from tag
+        run: |
+          echo "VERSION=${TAG#all-}" >> $GITHUB_ENV
+          echo "VERSION=${TAG#rust-}" >> $GITHUB_ENV
       - name: Enable Docker IPv6
         run: |
           echo '{ "ipv6": true }' | sudo tee -a /etc/docker/daemon.json
@@ -33,13 +40,13 @@ jobs:
         run: |
           source ./env
           cd tmc-langs-rust
-          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:$RUST_CLI_VER" --build-arg "RUST_CLI_URL=$RUST_CLI_URL"
+          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:$VERSION" --build-arg "RUST_CLI_URL=$RUST_CLI_URL"
           cd ..
       - name: Pushing image
         run: |
           source ./env
           cd tmc-langs-rust
-          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:$RUST_CLI_VER"
-          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:$RUST_CLI_VER" "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:latest"
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:$VERSION"
+          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:$VERSION" "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:latest"
           docker push "eu.gcr.io/moocfi-public/tmc-sandbox-tmc-langs-rust:latest"
           cd ..

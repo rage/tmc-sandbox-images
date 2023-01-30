@@ -3,14 +3,21 @@ name: Deploy csharp
 on:
   push:
     tags:
-      - "all-v*"
-      - "csharp-v*"
+      - "all-*"
+      - "csharp-*"
+
+env:
+  TAG: ${{ github.event.release.tag_name }}
 
 jobs:
   build_and_upload:
     name: Build and deploy
     runs-on: ubuntu-latest
     steps:
+      - name: Extract version from tag
+        run: |
+          echo "VERSION=${TAG#all-}" >> $GITHUB_ENV
+          echo "VERSION=${TAG#csharp-}" >> $GITHUB_ENV
       - name: Enable Docker IPv6
         run: |
           echo '{ "ipv6": true }' | sudo tee -a /etc/docker/daemon.json
@@ -33,13 +40,13 @@ jobs:
         run: |
           source ./env
           cd csharp
-          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:$RUST_CLI_VER" --build-arg "RUST_CLI_URL=$RUST_CLI_URL"
+          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:$VERSION" --build-arg "RUST_CLI_URL=$RUST_CLI_URL"
           cd ..
       - name: Pushing image
         run: |
           source ./env
           cd csharp
-          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:$RUST_CLI_VER"
-          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:$RUST_CLI_VER" "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:latest"
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:$VERSION"
+          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:$VERSION" "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:latest"
           docker push "eu.gcr.io/moocfi-public/tmc-sandbox-csharp:latest"
           cd ..

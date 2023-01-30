@@ -3,14 +3,21 @@ name: Deploy cyber-security-base
 on:
   push:
     tags:
-      - "all-v*"
-      - "cyber-security-base-v*"
+      - "all-*"
+      - "cyber-security-base-*"
+
+env:
+  TAG: ${{ github.event.release.tag_name }}
 
 jobs:
   build_and_upload:
     name: Build and deploy
     runs-on: ubuntu-latest
     steps:
+      - name: Extract version from tag
+        run: |
+          echo "VERSION=${TAG#all-}" >> $GITHUB_ENV
+          echo "VERSION=${TAG#cyber-security-base-}" >> $GITHUB_ENV
       - name: Enable Docker IPv6
         run: |
           echo '{ "ipv6": true }' | sudo tee -a /etc/docker/daemon.json
@@ -33,13 +40,13 @@ jobs:
         run: |
           source ./env
           cd cyber-security-base
-          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-cyber-security-base:$RUST_CLI_VER" --build-arg "RUST_CLI_URL=$RUST_CLI_URL"
+          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-cyber-security-base:$VERSION" --build-arg "RUST_CLI_URL=$RUST_CLI_URL"
           cd ..
       - name: Pushing image
         run: |
           source ./env
           cd cyber-security-base
-          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-cyber-security-base:$RUST_CLI_VER"
-          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-cyber-security-base:$RUST_CLI_VER" "eu.gcr.io/moocfi-public/tmc-sandbox-cyber-security-base:latest"
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-cyber-security-base:$VERSION"
+          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-cyber-security-base:$VERSION" "eu.gcr.io/moocfi-public/tmc-sandbox-cyber-security-base:latest"
           docker push "eu.gcr.io/moocfi-public/tmc-sandbox-cyber-security-base:latest"
           cd ..
