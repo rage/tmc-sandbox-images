@@ -1,18 +1,20 @@
 # tmc-sandbox-images
 
+## Creating a new version for a specific image
 
-## Bump TMC Langs Rust version in images
-### Bump tmc-langs-rust
+Create a new tag `tmc-sandbox-DIR-MAJOR.MINOR` to create a new version for the `tmc-sandbox-DIR` image. For example, to create a new version `1.2` for the image in the `python` directory, create the tag `tmc-sandbox-python-1.2`.
 
-1. Change `RUST_CLI_VER` to new version in `env` file
-2. `git add -p` & `git commit`
-3. `git push`
-4. Check latest tag https://github.com/rage/tmc-sandbox-images/tags
-5. `git tag -a rust-vX.Y.Z`
-6. `git push --tags`
-7. Check GitHub Actions tab (may take upto 40 minutes), when finished sandboxes will pull the image within 15 minutes
+The new version should have the `MINOR` version incremented. For example, if the current version of `tmc-sandbox-python` is `1.2`, the new version should be `1.3`.
 
-### Bump cyber-security-base
+## Creating a new version for all images
 
-1. Do above to step 4 (if you didn't already), use tag `git tag -a cyber-security-base-vXY`
-2. `git push --tags`
+Create a tag with the format `all-MAJOR.0` where the `MAJOR` is incremented by one from the current versions.
+
+## Updating tmc-langs-rust
+
+1. Change the `RUST_CLI_VER` variable to a new version in the `env` file
+2. Create a new `all-MAJOR.0` tag as instructed in the section above.
+
+## After creating a new version
+
+You can check the progress at https://github.com/rage/tmc-sandbox-images/actions. Creating the images may take up to 40 minutes. When finished sandboxes will pull the images within 15 minutes.
