@@ -1,4 +1,4 @@
-FROM debian:jessie as package-cache
+FROM debian:buster as package-cache
 
 ARG RUST_CLI_URL
 RUN test -n "$RUST_CLI_URL"
@@ -29,7 +29,7 @@ RUN git clone --recursive https://github.com/testmycode/tmc-csharp-runner tmc-cs
 ADD --chown=user ${RUST_CLI_URL} /tmc-langs-cli
 RUN chmod +x /tmc-langs-cli
 
-FROM debian:stretch
+FROM debian:buster
 
 RUN useradd --create-home user && \
     apt-get update && \

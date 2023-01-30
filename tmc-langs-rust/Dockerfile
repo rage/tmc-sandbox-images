@@ -1,4 +1,4 @@
-FROM debian:stretch
+FROM debian:buster
 
 ARG RUST_CLI_URL
 RUN test -n "$RUST_CLI_URL"
