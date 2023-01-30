@@ -7,7 +7,7 @@ on:
       - "cyber-security-base-*"
 
 env:
-  TAG: ${{ github.event.release.tag_name }}
+  TAG: ${{ github.ref_name }}
 
 jobs:
   build_and_upload:
