@@ -3,8 +3,8 @@ name: Deploy Java
 on:
   push:
     tags:
-      - "all-*"
-      - "java-*"
+      - "all-[0-9]+.[0-9]+"
+      - "java-[0-9]+.[0-9]+"
 
 env:
   TAG: ${{ github.ref_name }}

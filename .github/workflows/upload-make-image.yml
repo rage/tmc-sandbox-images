@@ -3,8 +3,8 @@ name: Deploy Make
 on:
   push:
     tags:
-      - "all-*"
-      - "make-*"
+      - "all-[0-9]+.[0-9]+"
+      - "make-[0-9]+.[0-9]+"
 
 env:
   TAG: ${{ github.ref_name }}

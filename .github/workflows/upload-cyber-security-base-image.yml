@@ -3,8 +3,8 @@ name: Deploy cyber-security-base
 on:
   push:
     tags:
-      - "all-*"
-      - "cyber-security-base-*"
+      - "all-[0-9]+.[0-9]+"
+      - "cyber-security-base-[0-9]+.[0-9]+"
 
 env:
   TAG: ${{ github.ref_name }}
