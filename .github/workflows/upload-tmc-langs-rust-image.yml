@@ -3,8 +3,8 @@ name: Deploy tmc-langs-rust
 on:
   push:
     tags:
-      - "all-*"
-      - "rust-*"
+      - "all-[0-9]+.[0-9]+"
+      - "rust-[0-9]+.[0-9]+"
 
 env:
   TAG: ${{ github.ref_name }}

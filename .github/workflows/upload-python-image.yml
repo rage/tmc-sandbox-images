@@ -3,8 +3,8 @@ name: Deploy Python
 on:
   push:
     tags:
-      - "all-*"
-      - "python-*"
+      - "all-[0-9]+.[0-9]+"
+      - "python-[0-9]+.[0-9]+"
 
 env:
   TAG: ${{ github.ref_name }}
