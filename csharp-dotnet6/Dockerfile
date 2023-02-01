@@ -1,11 +1,11 @@
-FROM debian:jessie as package-cache
+FROM debian:buster as package-cache
 
 ARG RUST_CLI_URL
 RUN test -n "$RUST_CLI_URL"
 
 RUN useradd --create-home user && \
     apt-get update && \
-    apt-get install -y apt-transport-https wget git libssl-dev libssl1.0.0 locales locales-all
+    apt-get install -y apt-transport-https wget git libssl-dev libssl1.1 locales locales-all
 
 # Make sure to install packages locales and locales-all in addition to these
 ENV LC_ALL en_US.UTF-8
@@ -29,7 +29,7 @@ RUN git clone --recursive https://github.com/testmycode/tmc-csharp-runner tmc-cs
 ADD --chown=user ${RUST_CLI_URL} /tmc-langs-cli
 RUN chmod +x /tmc-langs-cli
 
-FROM debian:stretch
+FROM debian:buster
 
 RUN useradd --create-home user && \
     apt-get update && \
