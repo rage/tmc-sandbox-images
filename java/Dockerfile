@@ -8,7 +8,7 @@ RUN \
     # common utilities
     apt install -y unzip curl build-essential libssl1.1 wget locales locales-all zstd && \
     # Java packages
-    apt install -y openjdk-11-jdk maven ant && \
+    apt install -y openjdk-11-jdk openjfx maven ant && \
     useradd --create-home user && \
     rm -rf /var/lib/apt/lists/*
 
