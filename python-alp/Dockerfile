@@ -3,6 +3,9 @@ FROM debian:buster
 ARG RUST_CLI_URL
 RUN test -n "$RUST_CLI_URL"
 
+ARG SANDBOX_PYTHON_VERSION
+RUN test -n "$SANDBOX_PYTHON_VERSION"
+
 RUN \
     apt update && \
     # common utilities
@@ -20,7 +23,15 @@ ENV LC_ALL en_US.UTF-8
 ENV LANG en_US.UTF-8
 ENV LANGUAGE en_US.UTF-8
 
-RUN bash -c "mkdir -p /pythonbuild && cd /pythonbuild && wget https://www.python.org/ftp/python/3.9.10/Python-3.9.10.tgz && tar -xzvf Python-3.9.10.tgz && cd Python-3.9.10/ && ./configure && make && make install"
+RUN \
+    bash -c "mkdir -p /pythonbuild && \
+    cd /pythonbuild && \
+    wget https://www.python.org/ftp/python/${SANDBOX_PYTHON_VERSION}/Python-${SANDBOX_PYTHON_VERSION}.tgz && \
+    tar -xzvf Python-${SANDBOX_PYTHON_VERSION}.tgz && \
+    cd Python-${SANDBOX_PYTHON_VERSION}/ && \
+    ./configure && \
+    make && \
+    make install"
 
 COPY requirements.txt /requirements.txt
 
