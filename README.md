@@ -10,6 +10,11 @@ The new version should have the `MINOR` version incremented. For example, if the
 
 Create a tag with the format `all-MAJOR.0` where the `MAJOR` is incremented by one from the current versions.
 
+## Updating Python
+
+1. Change the `SANDBOX_PYTHON_VERSION` variable to a new version in the `env` file
+2. Create a new tag(s) as instructed in the section above.
+
 ## Updating tmc-langs-rust
 
 1. Change the `RUST_CLI_VER` variable to a new version in the `env` file

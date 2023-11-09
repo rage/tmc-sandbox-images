@@ -40,7 +40,7 @@ jobs:
         run: |
           source ./env
           cd python
-          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-python:$VERSION" --build-arg "RUST_CLI_URL=$RUST_CLI_URL"
+          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-python:$VERSION" --build-arg "RUST_CLI_URL=$RUST_CLI_URL" --build-arg "SANDBOX_PYTHON_VERSION=$SANDBOX_PYTHON_VERSION"
           cd ..
       - name: Pushing image
         run: |
