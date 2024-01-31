@@ -1,0 +1,52 @@
+name: Deploy csharp-dotnet8
+
+on:
+  push:
+    tags:
+      - "all-[0-9]+.[0-9]+"
+      - "csharp-dotnet8-[0-9]+.[0-9]+"
+
+env:
+  TAG: ${{ github.ref_name }}
+
+jobs:
+  build_and_upload:
+    name: Build and deploy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Extract version from tag
+        run: |
+          echo "VERSION=${TAG#all-}" >> $GITHUB_ENV
+          echo "VERSION=${TAG#csharp-dotnet8-}" >> $GITHUB_ENV
+      - name: Enable Docker IPv6
+        run: |
+          echo '{ "ipv6": true }' | sudo tee -a /etc/docker/daemon.json
+          sudo systemctl reload docker
+      - uses: actions/checkout@v1
+      - name: Authenticate to Google Cloud
+        env:
+          GCLOUD_SERVICE_KEY: ${{ secrets.GCLOUD_SERVICE_KEY }}
+        run: |
+          echo Authenticating to Google Cloud
+          echo $GCLOUD_SERVICE_KEY | python -m base64 -d > /tmp/key.json
+          gcloud auth activate-service-account --key-file=/tmp/key.json
+          if gcloud auth configure-docker -q; then
+              echo "Authenticated to Google Cloud..."
+          else
+              echo "Authentication to Google Cloud failed. Exiting..."
+              exit 1
+          fi
+      - name: Building image
+        run: |
+          source ./env
+          cd csharp-dotnet8
+          docker build . -t "eu.gcr.io/moocfi-public/tmc-sandbox-csharp-dotnet8:$VERSION" --build-arg "RUST_CLI_URL=$RUST_CLI_URL"
+          cd ..
+      - name: Pushing image
+        run: |
+          source ./env
+          cd csharp-dotnet8
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-csharp-dotnet8:$VERSION"
+          docker tag "eu.gcr.io/moocfi-public/tmc-sandbox-csharp-dotnet8:$VERSION" "eu.gcr.io/moocfi-public/tmc-sandbox-csharp-dotnet8:latest"
+          docker push "eu.gcr.io/moocfi-public/tmc-sandbox-csharp-dotnet8:latest"
+          cd ..
