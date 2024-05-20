@@ -27,9 +27,9 @@
 		"2.4.5"
 	],
 	"Microsoft.NETCore.App.Ref": [
-		"5.0.0"
+		"6.0.0"
 	],
 	"Microsoft.AspNetCore.App.Ref": [
-		"5.0.0"
+		"6.0.0"
 	]
 }
