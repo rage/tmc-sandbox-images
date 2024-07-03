@@ -10,6 +10,8 @@ RUN mkdir -p /rbuild
 COPY installer1.sh              /rbuild/
 RUN bash /rbuild/installer1.sh
 
+RUN useradd --create-home user
+
 COPY installer2.sh installer.R  /rbuild/
 RUN bash /rbuild/installer2.sh
 

@@ -1,7 +1,7 @@
 # install tmcRtestrunner and required libraries
 #
 echo "--------------------------------------"                               &&
-echo "Installing tmcRtestrunner             "                               &&
+echo "Installing latest tmcRtestrunner      "                               &&
 echo "--------------------------------------"                               &&
 #
 Rscript /rbuild/installer.R

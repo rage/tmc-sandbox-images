@@ -51,10 +51,7 @@ apt-get install -y ${libsslpkg}                                             &&
 apt-get install -y libssl-dev libcurl4-openssl-dev libxml2-dev              &&
 # install R
 apt-get install -y r-base r-base-dev                                        &&
-
-useradd --create-home user
-
-apt-get update                                                              &&
+#
 apt-get install -y bison nano automake autoconf libx11-dev                  \
                    texinfo libxt-dev x11proto-core-dev libx11-xcb-dev       \
                    libxkbcommon-x11-0 less file libpango1.0-dev             \
