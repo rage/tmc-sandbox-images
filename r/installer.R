@@ -1,3 +1,3 @@
 install.packages(c("devtools", "testthat", "httr", "curl"),
-                 repos = "https://ftp.eenet.ee/pub/cran/")
+                 repos = "https://cloud.r-project.org")
 devtools::install_github("testmycode/tmc-r-tester/tmcRtestrunner")
