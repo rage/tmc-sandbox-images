@@ -1,33 +1,48 @@
-FROM debian:buster
+# The venv's interpreter symlinks into /usr/local, so both stages must use the same image.
+ARG PYTHON_IMAGE=python:3.13-slim-trixie
 
-ARG RUST_CLI_URL
-RUN test -n "$RUST_CLI_URL"
+FROM ${PYTHON_IMAGE} AS builder
 
-# latest chrome download url
-ENV CHROME_URL https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+COPY --from=ghcr.io/astral-sh/uv:0.12.2 /uv /bin/uv
+
+ENV UV_PROJECT_ENVIRONMENT=/opt/venv \
+    UV_PYTHON_DOWNLOADS=never \
+    UV_COMPILE_BYTECODE=1
+
+WORKDIR /build
+COPY pyproject.toml uv.lock ./
+RUN uv sync --locked --no-dev
+
+FROM ${PYTHON_IMAGE}
 
 RUN apt-get update && \
-    apt-get install -y wget build-essential python3.7 python3-pip unzip curl libsqlite3-dev sqlite3 zstd && \
-    wget ${CHROME_URL} && \
-    apt install -y ./google-chrome*.deb && \
+    apt-get install -y --no-install-recommends unzip curl wget locales sqlite3 zstd chromium chromium-driver fonts-liberation && \
+    sed -i 's/^# *en_US.UTF-8/en_US.UTF-8/' /etc/locale.gen && \
+    locale-gen && \
+    ln -s /usr/bin/chromium /usr/bin/google-chrome && \
+    ln -s /usr/bin/chromium /usr/bin/google-chrome-stable && \
     useradd --create-home user && \
     rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install django selenium beautifulsoup4 requests
+ENV LC_ALL=en_US.UTF-8 \
+    LANG=en_US.UTF-8 \
+    LANGUAGE=en_US.UTF-8 \
+    PATH=/opt/venv/bin:$PATH \
+    SE_OFFLINE=true
 
-# Gets latest chromedriver, the latest chromedriver should match to the latest chrome
-RUN wget http://chromedriver.storage.googleapis.com/`curl -sS chromedriver.storage.googleapis.com/LATEST_RELEASE`/chromedriver_linux64.zip
-RUN unzip chromedriver_linux64.zip
-RUN mv chromedriver /usr/bin/
+COPY --from=builder /opt/venv /opt/venv
 
 WORKDIR /app
 RUN chown user /app
-USER user
 
-COPY Dockerfile /Dockerfile
-
-ADD --chown=user ${RUST_CLI_URL} /tmc-langs-cli
-RUN chmod +x /tmc-langs-cli
+ARG RUST_CLI_URL
+RUN test -n "$RUST_CLI_URL"
+ADD --chown=user --chmod=755 ${RUST_CLI_URL} /tmc-langs-cli
+RUN /tmc-langs-cli --version
 ADD --chown=user tmc-run /tmc-run
+
+COPY Dockerfile /
+# Kept out of / so tools searching upward from /app for project config do not find them.
+COPY pyproject.toml uv.lock /image/
 
 USER user
