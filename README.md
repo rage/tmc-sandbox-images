@@ -23,3 +23,7 @@ Create a tag with the format `all-MAJOR.0` where the `MAJOR` is incremented by o
 ## After creating a new version
 
 You can check the progress at https://github.com/rage/tmc-sandbox-images/actions. Creating the images may take up to 40 minutes. When finished sandboxes will pull the images within 15 minutes.
+
+## Updating cyber-security-base Python packages
+
+Packages are pinned in `cyber-security-base/uv.lock`. Edit `cyber-security-base/pyproject.toml` if needed, run `uv lock --upgrade` in that directory, and commit both files. The image build fails if the lock is out of date.
